@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 class Event(models.Model):
     name = models.CharField(max_length=100)
@@ -20,7 +21,6 @@ class Guest(models.Model):
     email = models.EmailField()
     sign = models.BooleanField()
     create_time = models.DateTimeField(auto_now=True)
-
 
     class Meta:
         unique_together = ('event', 'phone')

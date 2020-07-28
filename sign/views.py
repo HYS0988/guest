@@ -67,7 +67,7 @@ def guest_manage(request):
 def search_guest(request):
     username = request.session.get('user', '')
     search_guest = request.GET.get('guest_name', '')
-    guest_list = Guest.objects.filter(name__contains=search_guest)
+    guest_list = Guest.objects.filter(realname__contains=search_guest)
     paginator = Paginator(guest_list, 2)
     page = request.GET.get('page')
     try:

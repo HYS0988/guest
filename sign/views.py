@@ -52,12 +52,7 @@ def guest_manage(request):
     guest_list = Guest.objects.all()
     paginator = Paginator(guest_list, 2)
     page = request.GET.get('page')
-    try:
-        contacts = paginator.page(page)
-    except PageNotAnInteger:
-        contacts = paginator.page(1)
-    except EmptyPage:
-        contacts = paginator.page(paginator.num_pages)
+    contacts = paginatorFun(paginator, page)
     # print('event:{}'.format(guest_list))
     return render(request, 'guest_manage.html', {'user': username,
                                                  'guests': contacts})
@@ -70,12 +65,17 @@ def search_guest(request):
     guest_list = Guest.objects.filter(realname__contains=search_guest)
     paginator = Paginator(guest_list, 2)
     page = request.GET.get('page')
-    try:
-        contacts = paginator.page(page)
-    except PageNotAnInteger:
-        contacts = paginator.page(1)
-    except EmptyPage:
-        contacts = paginator.page(paginator.num_pages)
+    contacts = paginatorFun(paginator, page)
     # print('event:{}'.format(guest_list))
     return render(request, 'guest_manage.html', {'user': username,
                                                  'guests': contacts})
+
+
+def paginatorFun(pagin, page):
+    try:
+        contacts = pagin.page(page)
+    except PageNotAnInteger:
+        contacts = pagin.page(1)
+    except EmptyPage:
+        contacts = pagin.page(pagin.num_pages)
+    return contacts

@@ -4,6 +4,9 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from sign.models import Event
 from sign.models import Guest
+from django.core.paginator import Paginator
+from django.core.paginator import EmptyPage
+from django.core.paginator import PageNotAnInteger
 
 
 # Create your views here.
@@ -47,6 +50,32 @@ def search_name(request):
 def guest_manage(request):
     username = request.session.get('user', '')
     guest_list = Guest.objects.all()
+    paginator = Paginator(guest_list, 2)
+    page = request.GET.get('page')
+    try:
+        contacts = paginator.page(page)
+    except PageNotAnInteger:
+        contacts = paginator.page(1)
+    except EmptyPage:
+        contacts = paginator.page(paginator.num_pages)
     # print('event:{}'.format(guest_list))
     return render(request, 'guest_manage.html', {'user': username,
-                                                 'events': guest_list})
+                                                 'guests': contacts})
+
+
+@login_required
+def search_guest(request):
+    username = request.session.get('user', '')
+    search_guest = request.GET.get('guest_name', '')
+    guest_list = Guest.objects.filter(name__contains=search_guest)
+    paginator = Paginator(guest_list, 2)
+    page = request.GET.get('page')
+    try:
+        contacts = paginator.page(page)
+    except PageNotAnInteger:
+        contacts = paginator.page(1)
+    except EmptyPage:
+        contacts = paginator.page(paginator.num_pages)
+    # print('event:{}'.format(guest_list))
+    return render(request, 'guest_manage.html', {'user': username,
+                                                 'guests': contacts})

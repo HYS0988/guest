@@ -84,8 +84,13 @@ def paginatorFun(pagin, page):
 
 @login_required
 def sign_index(request, eid):
+    guestallcount = Guest.objects.filter(event_id=eid).count()
+    guestsignedcount = Guest.objects.filter(event_id=eid, sign=True).count()
     event = get_object_or_404(Event, id=eid)
-    return render(request, 'sign_index.html', {'event': event})
+    return render(request, 'sign_index.html', {'event': event,
+                                               'guest_all': guestallcount,
+                                               'guestsigned': guestsignedcount,
+                                               })
 
 
 @login_required
@@ -107,8 +112,10 @@ def sign_index_action(request, eid):
             'hint': 'event id or phone error.'
         })
 
-    result = Guest.objects.filter(phone=phone, event_id=eid)
-    if not result.sign is True:
+    result = Guest.objects.get(phone=phone, event_id=eid)
+    print('result:{}'.format(result))
+    if result.sign is True:
+        print('result.values:sign:{}'.format(result.sign))
         return render(request, 'sign_index.html', {
             'event': event,
             'hint': 'user has sign in.'
@@ -119,5 +126,8 @@ def sign_index_action(request, eid):
         return render(request, 'sign_index.html', {
             'event': event,
             'hint': 'sign in success!',
-            'guest': result
+            'guest': result,
+            'guest_all': Guest.objects.filter(event_id=eid).count(),
+            'guestsigned': Guest.objects.filter(event_id=eid, sign=True).count(),
+
         })

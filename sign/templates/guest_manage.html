@@ -64,7 +64,7 @@
     </div>
     
     <!--列表分页器-->
-    <div class="pagination"></div>
+    <div class="pagination">
         <span class="step-links">
             {% if guests.has_previous %}
                 <a href="?page={{ guest.previous_page_number }}">previous</a>
@@ -76,5 +76,6 @@
                 <a href="?page={{ guests.next_page_number }}">next</a>
             {% endif %}
         </span>
+    </div>
 </body>
 </html>

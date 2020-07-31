@@ -37,7 +37,7 @@
                 </font>
                 {% csrf_token %}
                 <span>
-                    (已签到嘉宾数){{ guestsigned }}of (当前发布嘉宾数){{ guest_all }}
+                    已签到嘉宾数/当前发布嘉宾数: {{ guestsigned }}/{{ guest_all }}
                 </span>
             </form>
         </div>

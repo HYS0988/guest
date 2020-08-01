@@ -131,3 +131,10 @@ def sign_index_action(request, eid):
             'guestsigned': Guest.objects.filter(event_id=eid, sign=True).count(),
 
         })
+
+
+@login_required
+def logout(request):
+    auth.logout(request)
+    response = HttpResponseRedirect('/index/')
+    return response
